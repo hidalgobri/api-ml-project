@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/styles.css') }}">
+    <title>Predecir unidades vendidas</title>
+
+</head>
+
+<body>
+    {% block content%}
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    {% for msg in messages %}
+    <div class="alert alert-danger">
+        {{msg}}
+    </div>
+    {% endfor%}
+    {% endif %}
+    {% endwith %}
+
+
+    <div class="form-style-6">
+        <h1>Predecir unidades vendidas</h1>
+        <form action="predict" method="post">
+            <div class="form-group">
+                <label for="price">Precio (USD) </label><br>
+                <input type="text" id="price" name="price" placeholder="Ej: 50.40" required><br>
+            </div>
+            <div class="form-group">
+                <label for="retail_price">Precio al por menor</label><br>
+                <input type="text" id="retail_price" name="retail_price" placeholder="Ej: 20.23" required><br>
+            </div>
+            <div class="form-group">
+                <label for="rating_product">Rating producto</label><br>
+                <input type="text" id="rating_product" name="rating_product" aria-describedby="ratingHelp"
+                    placeholder="Ej: 4" required><br>
+                <small id="ratingHelp" class="form-text text-muted">0 = muy malo; 5 = excelente</small><br>
+            </div>
+            <div class="form-group">
+                <label for="rating_count_product"># Votos rating producto</label><br>
+                <input type="text" id="rating_count_product" aria-describedby="enterosHelp" name="rating_count_product"
+                    placeholder="Ej: 1013" required><br>
+                <small id="enterosHelp" class="form-text text-muted">Ingrese sólo números enteros</small><br>
+            </div>
+            <div class="form-group">
+                <label for="color_product">Seleccione color producto:</label><br>
+                <select name="color_product" id="color_product" required>
+                    <option value="amarillo">Amarillo</option>
+                    <option value="azul">Azul</option>
+                    <option value="blanco">Blanco</option>
+                    <option value="cafe">Cafe</option>
+                    <option value="estampado">Estampado | Multicolor</option>
+                    <option value="morado">Morado</option>
+                    <option value="naranja">Naranja</option>
+                    <option value="negro">Negro</option>
+                    <option value="plomo">Plomo</option>
+                    <option value="rosa">Rosa</option>
+                    <option value="rojo">Rojo</option>
+                    <option value="verde">Verde</option>
+                </select><br>
+            </div>
+            <div class="form-group">
+                <laber for="talla_product">Talla producto</label><br>
+                    <select name="talla_product" id="talla_product" required><br>
+                        <option value="s">S</option>
+                        <option value="xs">XS</option>
+                        <option value="m">M</option>
+                        <option value="xl">XL</option>
+                        <option value="l">L</option>
+                        <option value="no_size">No size</option>
+                    </select><br>
+            </div>
+            <div class="form-group">
+                <label for="product_inventory">Inventario producto</label><br>
+                <input type="text" id="product_inventory" name="product_inventory" placeholder="Ej: 45"
+                    aria-describedby="inventarioHelp" required><br>
+                <small id="inventarioHelp" class="form-text text-muted">Máximo 50 unidades. Ingrese sólo números
+                    enteros</small><br>
+            </div>
+            <div class="form-group">
+                <label for="shipping_price">Opciones de pago</label><br>
+                <select name="shipping_price" id="shipping_price" required><br>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="12">12</option>
+                </select><br>
+            </div>
+            <div class="form-group">
+                <label for="countries_shipped_to"># Ciudades que hace shipping</label><br>
+                <input type="text" id="countries_shipped_to" name="countries_shipped_to" aria-describedby="enterosHelp" placeholder="Ej: 20"
+                    required><br>
+                <small id="enterosHelp" class="form-text text-muted">Ingrese sólo números enteros</small><br>
+            </div>
+            <div class="form-group">
+                <label for="inventory_total">Inventario total</label><br>
+                <input type="text" name="inventory_total" id="inventory_total" aria-describedby="inventarioHelp"
+                    placeholder="Ej: 50" required></br>
+                <small id="inventarioHelp" class="form-text text-muted">Máximo 50 unidades. Ingrese sólo números enteros</small><br>
+            </div>
+            <div class="form-group">
+                <label for="merchant_info_subtitle">Comentarios hacia el vendedor</label><br>
+                <select name="merchant_info_subtitle" id="merchant_info_subtitle" required><br>
+                    <option value="excelentes">Excelentes</option>
+                    <option value="buenos">Buenos</option>
+                    <option value="regular">Regulares</option>
+                    <option value="malos">Malos</option>
+                    <option value="otros">Otros</option>
+                </select><br>
+            </div>
+            <div class="form-group">
+                <label for="merchant_rating">Rating vendedor</label><br>
+                <input type="text" id="merchant_rating" name="merchant_rating" placeholder="Ej: 3.2"
+                    aria-describedby="ratingHelp" required><br>
+                <small id="ratingHelp" class="form-text text-muted">0 = muy malo; 5 = excelente</small><br>
+            </div>
+            <div class="form-group">
+                <label for="merchant_rating_count"># Votos rating vendedor</label><br>
+                <input type="text" id="merchant_rating_count" name="merchant_rating_count" aria-describedby="enterosHelp" placeholder="Ej: 1022"
+                    required><br>
+                <small id="enterosHelp" class="form-text text-muted">Ingrese sólo números enteros</small><br><br>
+            </div>
+            <input type="submit" />
+        </form>
+    </div>
+
+    {% endblock%}
+
+</body>
+
+</html>
