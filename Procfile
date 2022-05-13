@@ -1,0 +1,1 @@
+web: gunicorn funciona_app:app

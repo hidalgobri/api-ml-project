@@ -7,7 +7,6 @@ from pandas import DataFrame
 from flask import Flask, request, render_template, flash
 # from sqlalchemy import true # Import flask libraries
 from starlette.responses import HTMLResponse
-import tensorflow as tf
 import re
 import sys
 
