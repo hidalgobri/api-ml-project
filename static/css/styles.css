@@ -54,7 +54,12 @@
 	border-width: 1px 1px 3px;
 	margin-bottom: 10px;
 }
-
+.coded_by {
+  text-align: center;
+  background-color: #36d1dc;
+  color: white;
+  padding: 1rem;
+}
 .respuesta{
     height: 200px;
     text-align: center;
